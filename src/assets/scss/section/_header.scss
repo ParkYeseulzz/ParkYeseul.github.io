@@ -1,0 +1,133 @@
+#header {
+    @include position-fixed; // 헤더를 페이지의 상단 고정. position: fixed;를 믹스인을 통해 재사용 가능
+    z-index: 10000; // 헤더가 다른 요소들 위에 나타나도록 z-index 값을 높게 설정
+}
+
+.header__inner {
+    @include flex-between; // flexbox 레이아웃을 사용하여 자식 요소들을 좌우로 정렬하고, 공간을 고르게 분배
+    background-color: rgba(116, 99, 99, 0.1); // 헤더의 배경색을 반투명하게 설정
+    backdrop-filter: blur(15px); // 배경 뒤의 내용을 흐릿하게 보여주는 블러 효과를 적용
+    padding: 1rem; // 헤더 내부에 여백을 추가
+
+    .header__logo {
+        font-size: 0.9rem; // 로고 텍스트의 기본 크기를 설정
+        text-align: center; // 로고를 가운데 정렬
+        text-transform: uppercase; // 로고 텍스트를 모두 대문자로 변환
+        line-height: 1; // 텍스트의 줄 높이를 설정하여 글자가 밀착
+
+        em {
+            font-size: 10px; // em 요소의 텍스트 크기 설정
+            display: block; // em 요소를 블록으로 변경하여 줄바꿈
+            color: var(--black200); // 색상을 변수로 설정하여 쉽게 변경 가능
+        }
+    }
+
+    .header__nav {
+        @media (max-width: 800px) {
+            display: none; // 모바일 화면 크기에서는 기본적으로 내비게이션 숨김
+
+            &.show {
+                display: block; // show 클래스가 추가되면 내비게이션 표시
+
+                ul {
+                    display: block; // 목록을 블록으로 표시하여 세로로 나열
+                    position: absolute; // 목록을 절대 위치로 설정하여 특정 위치에 고정
+                    right: 0; // 우측 정렬
+                    top: 68px; // 상단에서 68px 아래 배치
+                    background-color: rgba(116, 99, 99, 0.1); // 배경색을 반투명하게 설정
+                    backdrop-filter: blur(15px); // 배경에 블러 효과 추가
+                    z-index: 10000; // 다른 요소들 위에 나타나도록 z-index를 설정
+                    min-width: 150px; // 최소 너비를 150px로 설정
+                    padding: 20px 0; // 상하단에 20px의 여백을 추가
+
+                    li {
+                        display: block; // 목록 항목을 블록으로 설정하여 세로로 나열
+                        text-align: right; // 항목을 우측 정렬
+
+                        a {
+                            display: inline-block; // 링크를 인라인 블록으로 설정하여 padding을 적용
+                            padding: 10px; // 링크에 10px의 여백을 추가
+                        }
+                    }
+                }
+            }
+
+            &.show + .header__nav__mobile span::before {
+                width: 20px; // show 클래스가 있을 때 상단의 막대 길이를 줄임
+            }
+
+            &.show + .header__nav__mobile span::after {
+                width: 20px; // show 클래스가 있을 때 하단의 막대 길이를 줄임
+            }
+        }
+
+        li {
+            display: inline; // 데스크탑 화면에서 목록 항목을 인라인으로 표시하여 가로로 나열
+
+            a {
+                text-transform: uppercase; // 링크 텍스트를 모두 대문자로 변환
+                font-size: 14px; // 링크 텍스트 크기를 설정
+                padding: 14px; // 링크에 14px의 여백을 추가
+                position: relative; // 링크에 상대 위치를 설정하여 자식 요소의 위치 제어
+
+                &::before {
+                    content: ''; // 가상 요소 추가
+                    width: calc(100% - 28px); // 링크 너비에서 28px을 뺀 만큼의 너비를 설정
+                    height: 1px; // 가상 요소의 높이를 1px로 설정
+                    background-color: var(--black); // 가상 요소의 배경색을 설정
+                    position: absolute; // 가상 요소를 절대 위치로 설정하여 링크 내부의 특정 위치에 고정
+                    left: 14px; // 가상 요소를 좌측에서 14px 떨어진 위치에 배치
+                    bottom: 10px; // 가상 요소를 하단에서 10px 위에 배치
+                    transform: scaleX(0); // 가상 요소를 가로 방향으로 0배 확장하여 숨김
+                    transition: all 0.3s; // 가상 요소의 모든 스타일 변화를 0.3초에 걸쳐 부드럽게 처리
+                }
+
+                &:hover::before {
+                    transform: scaleX(1); // 마우스를 올렸을 때 가상 요소를 가로 방향으로 1배 확장
+                }
+            }
+        }
+    }
+
+    .header__nav__mobile {
+        display: none; // 기본적으로 모바일 내비게이션 버튼을 숨김
+        width: 40px; // 버튼의 너비를 40px로 설정
+        height: 40px; // 버튼의 높이를 40px로 설정
+        cursor: pointer; // 커서가 버튼 위로 올 때 포인터로 변경
+
+        @media (max-width: 800px) {
+            display: block; // 모바일 화면 크기에서는 내비게이션 버튼을 표시
+        }
+
+        span {
+            display: block; // span 요소를 블록으로 설정하여 세로로 나열
+            width: 40px; // span 요소의 너비를 40px로 설정
+            height: 2px; // span 요소의 높이를 2px로 설정
+            background-color: var(--black); // span 요소의 배경색을 설정
+            margin-top: 19px; // span 요소의 상단에 19px의 여백을 추가
+            position: relative; // span 요소에 상대 위치를 설정하여 자식 요소의 위치를 제어
+
+            &::before {
+                content: ""; // 가상 요소를 추가
+                width: 40px; // 가상 요소의 너비를 40px로 설정
+                height: 2px; // 가상 요소의 높이를 2px로 설정
+                background-color: var(--black); // 가상 요소의 배경색을 설정
+                position: absolute; // 가상 요소를 절대 위치로 설정하여 부모 요소의 특정 위치에 고정
+                right: 0; // 가상 요소를 우측에 배치
+                top: 6px; // 가상 요소를 상단에서 6px 아래에 배치
+                transition: width 0.3s; // 가상 요소의 너비 변화를 0.3초에 걸쳐 부드럽게 처리
+            }
+
+            &::after {
+                content: ""; // 가상 요소를 추가
+                width: 40px; // 가상 요소의 너비를 40px로 설정
+                height: 2px; // 가상 요소의 높이를 2px로 설정
+                background-color: var(--black); // 가상 요소의 배경색을 설정
+                position: absolute; // 가상 요소를 절대 위치로 설정하여 부모 요소의 특정 위치에 고정
+                left: 0; // 가상 요소를 좌측에 배치
+                bottom: 6px; // 가상 요소를 하단에서 6px 위에 배치
+                transition: width 0.3s; // 가상 요소의 너비 변화를 0.3초에 걸쳐 부드럽게 처리
+            }
+        }
+    }
+}
